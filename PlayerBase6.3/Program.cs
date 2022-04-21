@@ -24,52 +24,51 @@ namespace PlayerBase6._3
             {
                 Console.WriteLine("1 - Показать всех игроков\n2 - Добавить игрока\n3 - Блокировка игрока\n4 - Разблокировка игрока\n5 - Удаление игрока\n6 - Выход");
 
-                bool successfullyConverted = CanNumberBeConverted(out int result);
+                int userInput = Convert.ToInt32(Console.ReadLine());
 
-                if (successfullyConverted)
+                switch (userInput)
                 {
-                    switch (result)
-                    {
-                        case 1:
-                            ShowAllPlayers();
-                            break;
+                    case 1:
+                        ShowAllPlayers();
+                        break;
 
-                        case 2:
-                            AddNewPlayer();
-                            break;
+                    case 2:
+                        AddNewPlayer();
+                        break;
 
-                        case 3:
-                            BanPlayer();
-                            break;
+                    case 3:
+                        BanPlayer();
+                        break;
 
-                        case 4:
-                            UnBanPlayer();
-                            break;
+                    case 4:
+                        UnBanPlayer();
+                        break;
 
-                        case 5:
-                            DeletePalyer();
-                            break;
+                    case 5:
+                        DeletePalyer();
+                        break;
 
-                        case 6:
-                            _isWorking = false;
-                            break;
+                    case 6:
+                        _isWorking = false;
+                        break;
 
-                        default:
-                            Console.WriteLine("неправильно введенные двнные");
-                            break;
-                    }
+                    default:
+                        Console.WriteLine("неправильно введенные двнные");
+                        break;
                 }
-                else
-                {
-                    Console.WriteLine("Данные некорректны");
-                    Patch();                    
-                }                
             }
         }
 
-        private void Patch()
+        private void PrintPlugMassage()
         {
             Console.WriteLine("Нажмите любую кнопку для продолжения");
+            Console.ReadKey();
+            Console.Clear();
+        }
+
+        private void PrintPlugNegativeMassage()
+        {
+            Console.WriteLine("Некорректные данные\nНажмите любую кнопку для продолжения");
             Console.ReadKey();
             Console.Clear();
         }
@@ -79,6 +78,21 @@ namespace PlayerBase6._3
             string userInput = Console.ReadLine();
             bool successfullyConverted = int.TryParse(userInput, out result);
             return successfullyConverted;
+        }
+
+        private bool DoesPlayerExist(out int value)
+        {
+            value = 0;
+            CanNumberBeConverted( out int result);
+
+            if(result >= 1 && result < _players.Count + 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void ShowAllPlayers()
@@ -95,7 +109,7 @@ namespace PlayerBase6._3
             else
             {
                 Console.WriteLine("В базе нет игроков");
-                Patch();
+                PrintPlugMassage();
             }            
         }
 
@@ -104,26 +118,24 @@ namespace PlayerBase6._3
             Console.WriteLine("Введите имя");
             string userInputName = Console.ReadLine();
             Console.WriteLine("Введите уровень"); 
-            bool successfullyConverted = CanNumberBeConverted(out int result);
+            bool successfullyConverted = CanNumberBeConverted(out int playerLevel);
 
             if (successfullyConverted)
             {
-                if(result > 0 && result < int.MaxValue)
+                if(playerLevel > 0 && playerLevel < int.MaxValue)
                 {
-                    _players.Add(new Player(result, userInputName));
+                    _players.Add(new Player(playerLevel, userInputName));
                     Console.WriteLine("Игрок успешно добавлен");
-                    Patch();
+                    PrintPlugMassage();
                 }
                 else
-                {
-                    Console.WriteLine("Некорректные данные");
-                    Patch();
+                {                    
+                    PrintPlugNegativeMassage();
                 }
             }
             else
             {
-                Console.WriteLine("Некорректные данные");
-                Patch();
+                PrintPlugNegativeMassage();
             }            
         }       
 
@@ -133,32 +145,30 @@ namespace PlayerBase6._3
             {
                 ShowAllPlayers();
                 Console.WriteLine("Введите порядковый номер игрока которого хотите заблокировать");
-                bool successfullyConverted = CanNumberBeConverted(out int result);
-
-                if (successfullyConverted)
+                
+                if (DoesPlayerExist(out int result))
                 {
                     if (_players[result - 1].IsBanned == false)
                     {
                         _players[result - 1].Ban();
                         Console.WriteLine($"Игрок {_players[result-1].Name} успешно заблокирован ");
-                        Patch();
+                        PrintPlugMassage();
                     }
                     else
                     {
                         Console.WriteLine("Игрок уже заблокирован");
-                        Patch();
+                        PrintPlugMassage();
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Вы ввели некорректные данные");
-                    Patch();
+                    PrintPlugNegativeMassage();
                 }
             }
             else
             {
                 Console.WriteLine("Ваш сервер пустой");
-                Patch();
+                PrintPlugMassage();
             }
         }
 
@@ -167,33 +177,31 @@ namespace PlayerBase6._3
             if (_players.Count > 0)
             {
                 ShowAllPlayers();
-                Console.WriteLine("Введите порядковый номер игрока которого хотите разблокировать");
-                bool successfullyConverted = CanNumberBeConverted( out int result); 
+                Console.WriteLine("Введите порядковый номер игрока которого хотите разблокировать");                
 
-                if (successfullyConverted)
+                if (DoesPlayerExist(out int result))
                 {
                     if (_players[result - 1].IsBanned == true)
                     {
                         _players[result - 1].UnBan();
                         Console.WriteLine($"Игрок {_players[result - 1].Name} успешно разблокирован ");
-                        Patch();
+                        PrintPlugMassage();
                     }
                     else
                     {
                         Console.WriteLine("Игрок не заблокирован");
-                        Patch();
+                        PrintPlugMassage();
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Вы ввели некорректные данные");
-                    Patch();
+                    PrintPlugNegativeMassage();
                 }
             }
             else
             {
                 Console.WriteLine("Ваш сервер пустой");
-                Patch();
+                PrintPlugMassage();
             }
         }
 
@@ -203,24 +211,22 @@ namespace PlayerBase6._3
             {
                 ShowAllPlayers();
                 Console.WriteLine("Кого хотите удалить из базы?");
-                bool successfullyConverted = CanNumberBeConverted(out int result);
                 
-                if (successfullyConverted)
+                if (DoesPlayerExist(out int result))
                 {
                     Console.WriteLine("Игрок успешно удален");
                     _players.RemoveAt(result - 1);
-                    Patch();
+                    PrintPlugMassage();
                 }
                 else
                 {
-                    Console.WriteLine("Некорректные данные");
-                    Patch();
+                    PrintPlugNegativeMassage();
                 }               
             }
             else
             {
                 Console.WriteLine("База данных пустая");
-                Patch();
+                PrintPlugMassage();
             }
         } 
     }
@@ -233,7 +239,7 @@ namespace PlayerBase6._3
         public string Name { get; private set; }
         public bool IsBanned { get; private set; }
 
-        public Player(/*int id,*/ int level, string name)
+        public Player(int level, string name)
         {
             Id = ++Ids;
             Level = level;
@@ -252,7 +258,7 @@ namespace PlayerBase6._3
         }        
 
         public void ShowPlayerInfo()
-        {  
+        {   
             if(IsBanned == true)
             {
                 Console.WriteLine($"{Id}     | {Name} |    {Level}    | Заблокирован");
