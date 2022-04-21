@@ -7,8 +7,8 @@ namespace PlayerBase6._3
     {
         static void Main(string[] args)
         {
-            Base baza = new Base();
-            baza.Work();
+            Base playersBase = new Base();
+            playersBase.Work();
         }
     }
 
@@ -88,8 +88,7 @@ namespace PlayerBase6._3
                 Console.WriteLine("\nНомер |  Имя  |  Уровень | Статус");
 
                 for (int i = 0; i < _players.Count; i++)
-                {
-                    //Console.Write($"{i + 1} - ");
+                {                    
                     _players[i].ShowPlayerInfo();
                 }
             }
