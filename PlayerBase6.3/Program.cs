@@ -233,7 +233,7 @@ namespace PlayerBase6._3
         public string Name;
         public bool IsBanned;
 
-        public Player(/*int id,*/ int level, string name)
+        public Player(int level, string name)
         {
             Id = ++Ids;
             Level = level;
