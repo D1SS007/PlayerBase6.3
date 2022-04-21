@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace PlayerBase6._3
@@ -24,7 +24,7 @@ namespace PlayerBase6._3
             {
                 Console.WriteLine("1 - Показать всех игроков\n2 - Добавить игрока\n3 - Блокировка игрока\n4 - Разблокировка игрока\n5 - Удаление игрока\n6 - Выход");
 
-                bool successfullyConverted = ConvertStringIntoNumber(out int result);
+                bool successfullyConverted = CanNumberBeConverted(out int result);
 
                 if (successfullyConverted)
                 {
@@ -74,7 +74,7 @@ namespace PlayerBase6._3
             Console.Clear();
         }
 
-        private bool ConvertStringIntoNumber(out int result)
+        private bool CanNumberBeConverted(out int result)
         {
             string userInput = Console.ReadLine();
             bool successfullyConverted = int.TryParse(userInput, out result);
@@ -104,7 +104,7 @@ namespace PlayerBase6._3
             Console.WriteLine("Введите имя");
             string userInputName = Console.ReadLine();
             Console.WriteLine("Введите уровень"); 
-            bool successfullyConverted = ConvertStringIntoNumber(out int result);
+            bool successfullyConverted = CanNumberBeConverted(out int result);
 
             if (successfullyConverted)
             {
@@ -133,7 +133,7 @@ namespace PlayerBase6._3
             {
                 ShowAllPlayers();
                 Console.WriteLine("Введите порядковый номер игрока которого хотите заблокировать");
-                bool successfullyConverted = ConvertStringIntoNumber(out int result);
+                bool successfullyConverted = CanNumberBeConverted(out int result);
 
                 if (successfullyConverted)
                 {
@@ -168,7 +168,7 @@ namespace PlayerBase6._3
             {
                 ShowAllPlayers();
                 Console.WriteLine("Введите порядковый номер игрока которого хотите разблокировать");
-                bool successfullyConverted = ConvertStringIntoNumber( out int result); 
+                bool successfullyConverted = CanNumberBeConverted( out int result); 
 
                 if (successfullyConverted)
                 {
@@ -203,12 +203,12 @@ namespace PlayerBase6._3
             {
                 ShowAllPlayers();
                 Console.WriteLine("Кого хотите удалить из базы?");
-                bool successfullyConverted = ConvertStringIntoNumber(out int result);
+                bool successfullyConverted = CanNumberBeConverted(out int result);
                 
                 if (successfullyConverted)
                 {
-                    _players.RemoveAt(result - 1);
                     Console.WriteLine("Игрок успешно удален");
+                    _players.RemoveAt(result - 1);
                     Patch();
                 }
                 else
@@ -227,13 +227,13 @@ namespace PlayerBase6._3
 
     class Player
     {
-        public static int Ids;
-        public int Id;
-        public int Level;
-        public string Name;
-        public bool IsBanned;
+        public static int Ids { get; private set; }
+        public int Id { get; private set; }
+        public int Level { get; private set; }
+        public string Name { get; private set; }
+        public bool IsBanned { get; private set; }
 
-        public Player(int level, string name)
+        public Player(/*int id,*/ int level, string name)
         {
             Id = ++Ids;
             Level = level;
@@ -252,9 +252,7 @@ namespace PlayerBase6._3
         }        
 
         public void ShowPlayerInfo()
-        {
-            
-
+        {  
             if(IsBanned == true)
             {
                 Console.WriteLine($"{Id}     | {Name} |    {Level}    | Заблокирован");
